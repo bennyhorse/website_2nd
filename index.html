@@ -15,7 +15,7 @@
 
         .photo-container {
             width: 100%;
-            max-width: 520px;
+            max-width: 500px;
             margin: 20px auto;
             padding: 10px;
             border: 1px solid #ccc;
@@ -104,6 +104,36 @@
             background-color: #45a049;
         }
 
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .password-input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .error-message {
+            color: #ff0000;
+            margin: 10px 0;
+            display: none;
+        }
+
         /* @media (max-width: 600px) {
             .photo {
                 height: 300px;
@@ -112,7 +142,14 @@
     </style>
 </head>
 <body>
-    <div class="photo-container">
+    <div class="login-container" id="loginContainer">
+        <h2>Enter Password to View Album</h2>
+        <input type="password" id="passwordInput" class="password-input" placeholder="Enter password">
+        <div class="error-message" id="errorMessage">Incorrect password. Please try again.</div>
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+
+    <div class="photo-container" id="albumContainer" style="display: none;">
         <div class="monthBar" id="monthDisplay"></div>
         <div class="subDesc" id="subDescDisplay"></div>
         <div class="photo" id="photoDisplay">
@@ -132,6 +169,33 @@
     </div>
 
     <script>
+        const correctPassword = "123"; // Change this to your desired password
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const loginContainer = document.getElementById('loginContainer');
+            const albumContainer = document.getElementById('albumContainer');
+            // const logoutButton = document.getElementById('logoutButton');
+
+            if (passwordInput.value === correctPassword) {
+                loginContainer.style.display = 'none';
+                albumContainer.style.display = 'block';
+                // logoutButton.style.display = 'block';
+                initializeAlbum();
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+            }
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
         const mediaContent = [
             {   
                 type: 'photo',
@@ -674,8 +738,10 @@
         }
 
         // Initialize first photo and buttons
-        updateMedia();
-        updateNavigationButtons();
+        function initializeAlbum() {
+            updateMedia();
+            updateNavigationButtons();
+        }
     </script>
 </body>
 </html>
