@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 10px auto;
-            padding: 10px 10px 10px 10px;
+            padding: 10px;
             text-align: center;
         }
 
@@ -169,16 +169,40 @@
     </div>
 
     <script>
-        const correctPassword = "123"; // Change this to your desired password
+        const getSHA256Hash = async (input) => {
+            const textAsBuffer = new TextEncoder().encode(input);
+            const hashBuffer = await window.crypto.subtle.digest("SHA-256", textAsBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hash = hashArray
+                .map((item) => item.toString(16).padStart(2, "0"))
+                .join("");
+            return hash;
+        };
 
-        function checkPassword() {
+        const correctPassword = "be777e1c1380a74447b462723b7002240abd5f2714187f240c63699ba9810ee5"; // Change this to your desired password
+
+        async function checkPassword() {
             const passwordInput = document.getElementById('passwordInput');
             const errorMessage = document.getElementById('errorMessage');
             const loginContainer = document.getElementById('loginContainer');
             const albumContainer = document.getElementById('albumContainer');
             // const logoutButton = document.getElementById('logoutButton');
 
-            if (passwordInput.value === correctPassword) {
+            const getSHA256Hash = async (input) => {
+                const textAsBuffer = new TextEncoder().encode(input);
+                const hashBuffer = await window.crypto.subtle.digest("SHA-256", textAsBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hash = hashArray
+                    .map((item) => item.toString(16).padStart(2, "0"))
+                    .join("");
+                return hash;
+            };
+
+            const hash = await getSHA256Hash(passwordInput);
+            alert(passwordInput.value);
+            alert(await getSHA256Hash(passwordInput));
+
+            if (await getSHA256Hash(passwordInput) === correctPassword) {
                 loginContainer.style.display = 'none';
                 albumContainer.style.display = 'block';
                 // logoutButton.style.display = 'block';
